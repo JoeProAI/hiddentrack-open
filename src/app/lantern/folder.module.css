@@ -1,0 +1,16 @@
+/* Play my folder: picker + track drawer over the cathedral stage */
+.pick { position: absolute; z-index: 5; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-2deg); display: grid; gap: .6rem; justify-items: start; padding: 1rem 1.2rem; border: 3px solid var(--color-accent); background: rgba(9,8,8,.92); box-shadow: 6px 6px 0 var(--color-hot); max-width: min(92vw, 440px); }
+.pick h2 { margin: 0; font: 900 clamp(1.4rem, 5vw, 2.2rem)/.9 var(--font-display); font-variation-settings: "wdth" 120; text-transform: uppercase; }
+.pick p { margin: 0; font-size: .62rem; letter-spacing: .06em; line-height: 1.45; color: color-mix(in srgb, var(--color-text) 80%, transparent); }
+.btns { display: flex; flex-wrap: wrap; gap: .4rem; }
+.btn { position: relative; display: inline-flex; align-items: center; padding: .55rem .8rem; border: 2px solid var(--color-accent); background: var(--color-accent); color: var(--color-bg); font: 900 .72rem/1 var(--font-mono); letter-spacing: .08em; cursor: pointer; }
+.btn.alt { background: transparent; color: var(--color-text); border-color: rgba(243,236,218,.45); }
+.btn:hover { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+.btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.list { position: absolute; z-index: 4; right: clamp(.55rem, 2.6vw, 1rem); bottom: 64px; width: min(44vw, 320px); max-height: 46vh; overflow: auto; margin: 0; padding: 0; list-style: none; border: 2px solid rgba(243,236,218,.35); background: rgba(9,8,8,.86); font-size: .58rem; }
+.list li button { display: grid; grid-template-columns: 2.2em 1fr auto; gap: .4em; width: 100%; padding: .35rem .5rem; border: 0; border-bottom: 1px solid rgba(243,236,218,.12); background: none; color: var(--color-text); font: 700 .58rem/1.25 var(--font-mono); text-align: left; cursor: pointer; }
+.list li button:hover, .list li button[aria-current="true"] { background: var(--color-accent); color: var(--color-bg); }
+.list i { font-style: normal; opacity: .6; }
+.list span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.privacy { position: absolute; z-index: 3; left: clamp(.55rem, 2.6vw, 1rem); top: calc(clamp(.55rem, 2.6vw, 1rem) + 38px); font-size: .5rem; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); text-shadow: 0 1px 2px #000; }
+@media (max-width: 640px) { .list { width: 60vw; max-height: 32vh; } }

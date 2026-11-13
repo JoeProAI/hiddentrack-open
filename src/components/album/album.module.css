@@ -1,0 +1,106 @@
+/* Counting House: the Fresh Cuts look, ruled like a ledger. */
+.hero { display: grid; grid-template-columns: minmax(16rem, 30rem) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; padding: 5rem 10vw 4.5rem 6vw; border-bottom: 1px solid var(--line); }
+.heroText { display: flex; flex-direction: column; gap: 1.6rem; min-width: 0; }
+.eyebrow { margin: 0; color: var(--signal); font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(4.2rem, 9vw, 8.5rem); line-height: .8; letter-spacing: -.06em; }
+.title em, .tracksHead em, .promiseBig em, .coverTitle em { font-style: normal; color: var(--signal); }
+.summary { margin: 0; max-width: 36rem; color: #363236; font-size: .9rem; line-height: 1.72; }
+.heroActions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; }
+.playAll { appearance: none; display: inline-flex; align-items: center; gap: .7rem; min-height: 48px; padding: 0 1.4rem 0 1.1rem; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font: 500 .68rem/1 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; cursor: pointer; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+.playAll span { color: var(--acid); font-size: .85rem; letter-spacing: -.1em; }
+.playAll:hover, .playAll[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); }
+.playAll:hover span { color: var(--paper); }
+.playAll:active, .buy:active { transform: translateY(2px); }
+.quiet { font-size: .62rem; letter-spacing: .14em; color: var(--muted); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .3em; }
+.quiet:hover { color: var(--signal); }
+
+/* Placeholder cover: ruled ledger paper in ink, with the red double margin rule. */
+.cover { position: relative; aspect-ratio: 1; margin: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 7% 8% 7% 17%; background: var(--ink); color: var(--paper); overflow: hidden; box-shadow: 0 1.4rem 2.8rem -1.6rem color-mix(in srgb, var(--ink) 70%, transparent); }
+.coverRules { position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(to right, transparent 11.5%, var(--signal) 11.5%, var(--signal) calc(11.5% + 1px), transparent calc(11.5% + 1px), transparent 12.6%, var(--signal) 12.6%, var(--signal) calc(12.6% + 1px), transparent calc(12.6% + 1px)),
+  repeating-linear-gradient(to bottom, transparent 0, transparent calc(6.25% - 1px), color-mix(in srgb, var(--paper) 13%, transparent) calc(6.25% - 1px), color-mix(in srgb, var(--paper) 13%, transparent) 6.25%); }
+.coverTop, .coverFoot { position: relative; display: flex; justify-content: space-between; gap: 1rem; margin: 0; font-size: clamp(.5rem, 1.1vw, .66rem); letter-spacing: .18em; }
+.coverTop span, .coverFoot span:first-child { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+.coverTitle { position: relative; margin: 0; font-family: var(--font-display); font-size: clamp(2.8rem, 6.6vw, 5.6rem); line-height: .8; letter-spacing: -.06em; }
+.coverTally { position: absolute; right: 8%; top: 22%; bottom: 22%; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; justify-content: space-between; font-size: clamp(.45rem, .9vw, .58rem); letter-spacing: .1em; color: color-mix(in srgb, var(--acid) 70%, transparent); text-align: right; }
+.coverStamp { padding: .3em .55em; border: 1px solid var(--signal); color: var(--signal); transform: rotate(-4deg); }
+
+/* CD block */
+.cd { max-width: 34rem; padding: 1.3rem 1.4rem; border: 1px solid var(--ink); background: color-mix(in srgb, var(--paper) 60%, white); }
+.cdHead { margin: 0 0 .6rem; font-family: var(--font-display); font-size: 1.9rem; line-height: 1; letter-spacing: -.03em; }
+.cdLine { margin: 0 0 1rem; font-size: .78rem; line-height: 1.6; color: #363236; }
+.cdLine strong { font-weight: 500; color: var(--ink); }
+.buy { display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.2rem; border: 1px solid var(--signal); background: var(--signal); color: var(--paper); font: 500 .68rem/1 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; text-decoration: none; transition: background .18s ease, color .18s ease, transform .18s ease; }
+.buy:hover { background: var(--ink); border-color: var(--ink); }
+.soon { margin: 0; padding: .7rem .8rem; border-left: 3px solid var(--signal); background: color-mix(in srgb, var(--signal) 9%, transparent); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+.cdNote { margin: 1rem 0 0; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* Track list as ledger entries */
+.tracks { padding: 4rem 10vw 4rem 6vw; border-bottom: 1px solid var(--line); }
+.tracksHead { margin: 0 0 2rem; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: .95; letter-spacing: -.04em; }
+.ledger { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--ink); }
+.entry { position: relative; display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) 1.6rem 48px; align-items: center; gap: 1.1rem; padding: .75rem 0 .75rem .2rem; border-bottom: 1px solid var(--line); transition: background .18s ease, color .18s ease; }
+.entry::before { content: ""; position: absolute; left: 3.6rem; top: 0; bottom: 0; border-left: 1px solid color-mix(in srgb, var(--signal) 45%, transparent); }
+.entry:hover, .entry:focus-within { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.entryOn, .entryOn:hover { background: var(--ink); color: var(--paper); }
+.entryNo { font-family: var(--font-display); font-size: 2.1rem; line-height: 1; letter-spacing: -.08em; color: var(--signal); font-variant-numeric: tabular-nums; }
+.entryOn .entryNo { color: var(--acid); }
+.entryMain { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem 1.2rem; min-width: 0; padding-left: .6rem; }
+.entryTitle { font-family: var(--font-display); font-size: clamp(1.45rem, 2.6vw, 2.15rem); line-height: 1.05; letter-spacing: -.03em; text-decoration: none; }
+.entryTitle:hover { color: var(--signal); }
+.entryLane { color: var(--muted); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; }
+.entryOn .entryLane { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+.entryE { display: inline-grid; place-items: center; width: 1.25rem; height: 1.25rem; border: 1px solid currentColor; font-size: .55rem; color: var(--muted); }
+.entryOn .entryE { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+.entryPlay { appearance: none; width: 44px; height: 44px; border: 1px solid var(--line); background: transparent; color: inherit; font-size: .75rem; letter-spacing: -.1em; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease; }
+.entryPlay:hover, .entryPlay[aria-pressed="true"] { background: var(--acid); border-color: var(--acid); color: var(--ink); }
+.entryPlay:active { transform: translateY(1px); }
+
+.promise { padding: 4.5rem 10vw 5rem 6vw; max-width: 64rem; }
+.promiseBig { margin: 0 0 1.4rem; font-family: var(--font-display); font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: 1; letter-spacing: -.04em; }
+.promise p:not(.promiseBig) { margin: 0; max-width: 40rem; color: #363236; font-size: .9rem; line-height: 1.72; }
+.promise a { text-underline-offset: .25em; }
+.promise a:hover { color: var(--signal); }
+
+.playAll:focus-visible, .buy:focus-visible, .quiet:focus-visible, .entryTitle:focus-visible, .entryPlay:focus-visible, .promise a:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+
+/* Collection pages that bring their own hero and cover art. Counting House leaves these unused. */
+.banner { margin: 0; border-bottom: 1px solid var(--line); }
+.banner img { display: block; width: 100%; height: auto; }
+.intro { display: flex; flex-direction: column; gap: 1.2rem; padding: 2.2rem 10vw 2.4rem 6vw; border-bottom: 1px solid var(--line); }
+.quietTitle { margin: 0; max-width: 22ch; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.15; letter-spacing: .02em; text-transform: uppercase; color: var(--muted); }
+.entryCover { width: 4.75rem; height: 4.75rem; object-fit: cover; display: block; border: 1px solid var(--line); }
+.entryHook { flex-basis: 100%; margin: 0; color: var(--muted); font-size: .72rem; font-weight: 400; letter-spacing: 0; text-transform: none; line-height: 1.45; }
+.ledgerArt .entry { grid-template-columns: 3.4rem 4.75rem minmax(0, 1fr) 1.6rem 48px; }
+.ledgerArt .entry::before { content: none; }
+.ledgerPlain .entry { grid-template-columns: 3.4rem minmax(0, 1fr) 48px; }
+.ledgerArt.ledgerPlain .entry { grid-template-columns: 3.4rem 4.75rem minmax(0, 1fr) 48px; }
+.entryOn .entryHook { color: color-mix(in srgb, var(--paper) 72%, transparent); }
+
+@media (prefers-reduced-motion: reduce) { .playAll, .buy, .entry, .entryPlay { transition: none; } }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding: 3.5rem 6vw 3rem; } .cover { max-width: 26rem; width: 100%; } .tracks, .promise, .intro { padding-left: 6vw; padding-right: 6vw; } }
+@media (max-width: 560px) {
+  .entry { grid-template-columns: 2.6rem minmax(0, 1fr) 44px; }
+  .entry::before { left: 2.8rem; }
+  .entryE { display: none; }
+  .entryNo { font-size: 1.6rem; }
+  .entryCover { width: 3.4rem; height: 3.4rem; }
+  .ledgerArt .entry, .ledgerArt.ledgerPlain .entry { grid-template-columns: 2.4rem 3.4rem minmax(0, 1fr) 44px; }
+  .ledgerPlain .entry { grid-template-columns: 2.6rem minmax(0, 1fr) 44px; }
+}
+
+/* Broadcast skin: the album page inside the dark shell. */
+.summary, .promise p:not(.promiseBig) { color: color-mix(in srgb, var(--paper) 72%, transparent); }
+.title { font-family: var(--font-display); font-variation-settings: "wdth" 62; text-transform: uppercase; letter-spacing: -.03em; }
+.playAll { border-color: var(--acid); background: transparent; color: var(--paper); }
+.playAll:hover, .playAll[aria-pressed="true"] { background: var(--acid); border-color: var(--acid); color: #090808; }
+.playAll:hover span, .playAll[aria-pressed="true"] span { color: #090808; }
+.cd { border: 1px solid var(--line); border-left: 3px solid var(--signal); background: color-mix(in srgb, var(--paper) 5%, transparent); color: var(--paper); }
+.cdHead { color: var(--paper); text-transform: uppercase; }
+.cdLine { color: color-mix(in srgb, var(--paper) 72%, transparent); }
+.cdLine strong { color: var(--acid); }
+.buy:hover { background: var(--acid); border-color: var(--acid); color: #090808; }
+.ledger { border-top-color: var(--paper); }
+.entry:hover, .entry:focus-within { background: color-mix(in srgb, var(--paper) 6%, transparent); }
+.entryOn, .entryOn:hover { background: color-mix(in srgb, var(--acid) 12%, transparent); color: var(--paper); box-shadow: inset 3px 0 0 var(--acid); }
+.entryPlay:hover, .entryPlay[aria-pressed="true"] { color: #090808; }

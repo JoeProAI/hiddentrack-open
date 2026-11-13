@@ -1,0 +1,161 @@
+/* X card player, 480x270 inside X's iframe. Full-bleed Black Sun behind a
+   brutal control deck; the title is a meter that widens with the bass. */
+.frame {
+  --bass: 0; --hit: 0;
+  position: fixed; inset: 0; isolation: isolate; display: grid;
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto auto;
+  gap: clamp(.3rem, 1.6vh, .6rem);
+  padding: clamp(.55rem, 2.6vw, 1rem);
+  background: var(--color-bg); color: var(--color-text);
+  font-family: var(--font-mono); overflow: hidden;
+}
+.viz { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; display: block;
+  background: radial-gradient(circle at 80% 42%, #000 0 15%, var(--color-hot) 15.5%, transparent 18%), var(--color-bg); }
+.scan { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(9,8,8,.92) 0%, rgba(9,8,8,.55) 45%, transparent 75%), linear-gradient(0deg, rgba(9,8,8,.95) 0%, transparent 42%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.3) 2px 3px); }
+
+.top { display: flex; align-items: center; gap: .6rem; font-size: .56rem; letter-spacing: .18em; }
+.mark { font: 900 .82rem/1 var(--font-display); font-variation-settings: "wdth" 140; letter-spacing: -.01em; }
+.mark em { font-style: normal; margin-left: .25em; padding: .1em .25em .05em; background: var(--color-hot); color: var(--color-bg); font-variation-settings: "wdth" 60; }
+.air { margin-right: auto; color: var(--color-muted); }
+.air::before { content: "\25A0"; margin-right: .5em; color: var(--color-hot); }
+.frame[data-state="playing"] .air { color: var(--color-accent); }
+.frame[data-state="playing"] .air::before { animation: blink .5s steps(2) infinite; }
+.frame[data-state="loading"] .air::before { color: var(--color-warning); animation: blink .25s steps(2) infinite; }
+.out { display: inline-flex; align-items: center; min-height: 32px; padding: 0 .5rem; border: 1px solid var(--color-accent); background: rgba(9,8,8,.85); color: var(--color-accent); text-decoration: none; font-weight: 700; }
+.out:hover { background: var(--color-accent); color: var(--color-bg); }
+.out:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.now { align-self: end; min-width: 0; max-width: 78%; }
+.num { color: var(--color-hot); font: 900 .9rem/1 var(--font-display); font-variation-settings: "wdth" 150; letter-spacing: -.02em; }
+.num i { font-style: normal; color: var(--color-muted); font-size: .7em; }
+.title { margin: .15rem 0 0; font: 900 clamp(1.7rem, 9.5vw, 3.4rem)/.84 var(--font-display); font-variation-settings: "wdth" calc(60 + var(--bass) * 70); letter-spacing: -.035em; text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-shadow: calc(var(--hit) * 6px) 0 0 var(--color-hot), calc(var(--hit) * -4px) 0 0 var(--color-ice); }
+.lane { margin: .3rem 0 0; color: color-mix(in srgb, var(--color-text) 72%, transparent); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lane b { color: var(--color-accent); font-weight: 700; }
+.frame[data-state="error"] .lane { display: inline-block; padding: .25rem .4rem; background: var(--color-hot); color: var(--color-text); white-space: normal; }
+.frame[data-state="loading"] .lane { color: var(--color-warning); }
+
+/* pre-play poster: the whole stage is the button until the first tap */
+.poster { position: absolute; left: clamp(.55rem, 2.6vw, 1rem); top: 21%; z-index: 2; display: flex; align-items: stretch; padding: 0; border: 3px solid var(--color-accent); background: var(--color-bg); color: var(--color-text); cursor: pointer; box-shadow: 5px 5px 0 var(--color-hot); transform: rotate(-3deg); transition: box-shadow var(--duration-fast), transform var(--duration-fast); }
+.posterIcon { display: grid; place-items: center; width: 54px; background: var(--color-accent); color: var(--color-bg); font-size: 1.4rem; }
+.posterText { display: flex; flex-direction: column; justify-content: center; padding: .35rem .7rem; font: 900 1.25rem/1 var(--font-display); font-variation-settings: "wdth" 120; letter-spacing: -.01em; text-align: left; }
+.posterText small { margin-top: .25rem; font: 700 .48rem/1.2 var(--font-mono); letter-spacing: .14em; color: var(--color-hot); }
+.poster:hover { box-shadow: 8px 8px 0 var(--color-accent); }
+.poster:hover .posterIcon { background: var(--color-hot); color: var(--color-text); }
+.poster:active { transform: rotate(-3deg) translate(5px, 5px); box-shadow: none; }
+.poster:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+
+.scrub { display: grid; grid-template-columns: auto 1fr auto; gap: .55rem; align-items: center; font-size: .58rem; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+.scrub input { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; margin: 0; background: linear-gradient(to right, var(--color-accent) var(--pct), rgba(243,236,218,.2) var(--pct)); cursor: pointer; }
+.scrub input:disabled { cursor: not-allowed; opacity: .5; }
+.scrub input::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 16px; background: var(--color-hot); }
+.scrub input::-moz-range-thumb { width: 6px; height: 16px; border: 0; border-radius: 0; background: var(--color-hot); }
+.scrub input:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+
+.controls { display: flex; gap: 0; }
+.ctl { display: inline-flex; flex: 1; align-items: center; justify-content: center; min-width: 44px; height: 40px; margin-left: -2px; padding: 0 .5rem; border: 2px solid rgba(243,236,218,.35); background: rgba(9,8,8,.85); color: var(--color-text); font: 700 .6rem/1 var(--font-mono); letter-spacing: .08em; text-decoration: none; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast); }
+.ctl:first-child { margin-left: 0; }
+.ctl:hover { position: relative; z-index: 1; border-color: var(--color-accent); color: var(--color-accent); }
+.ctl:active { background: var(--color-accent); color: var(--color-bg); }
+.ctl:focus-visible { position: relative; z-index: 2; outline: 2px solid var(--color-focus); outline-offset: 1px; }
+.main { flex: 1.6; background: var(--color-accent); color: var(--color-bg); border-color: var(--color-accent); font-size: .9rem; }
+.main:hover { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+.main[aria-busy="true"] { animation: blink .5s steps(2) infinite; }
+.on { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+@keyframes blink { 50% { opacity: .35; } }
+
+.frame[data-state="idle"] .num { visibility: hidden; }
+@media (max-height: 300px) { .ctl { height: 36px; } .title { font-size: clamp(1.5rem, 8vw, 2.6rem); } .poster { top: 19%; } }
+@media (max-height: 220px) { .lane, .air { display: none; } .ctl { height: 32px; } }
+@media (prefers-reduced-motion: reduce) { .frame[data-state] .air::before, .main[aria-busy="true"] { animation: none; } .poster { transform: none; } }
+.ch { display: inline-flex; }
+@media (max-width: 420px) { .ch span span { display: none; } }
+
+/* Lantern Slide LIVE: GPU-dreamed frames over the Black Sun, a red LIVE badge, and a tiny prompt box */
+.live { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .6s; pointer-events: none; }
+.live[data-on] { opacity: 1; }
+.frame[data-live] .scan { background: linear-gradient(90deg, rgba(9,8,8,.78) 0%, rgba(9,8,8,.3) 45%, transparent 70%), linear-gradient(0deg, rgba(9,8,8,.9) 0%, transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.18) 2px 3px); }
+.frame[data-live] .air { padding: .15em .45em; background: var(--color-hot); color: var(--color-text); font-weight: 700; }
+.frame[data-live] .air::before { color: var(--color-text); animation: blink 1s steps(2) infinite; }
+.dream { position: absolute; z-index: 3; right: clamp(.55rem, 2.6vw, 1rem); top: calc(clamp(.55rem, 2.6vw, 1rem) + 40px); width: min(46%, 230px); display: grid; grid-template-columns: 1fr auto; }
+.dream input { min-width: 0; height: 28px; padding: 0 .5rem; border: 2px solid var(--color-accent); border-right: 0; background: rgba(9,8,8,.82); color: var(--color-text); font: 700 .6rem/1 var(--font-mono); letter-spacing: .04em; }
+.dream input::placeholder { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+.dream input:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+.dream > button { width: 34px; font-size: .62rem; height: 28px; border: 2px solid var(--color-accent); background: var(--color-accent); color: var(--color-bg); font-weight: 900; cursor: pointer; }
+.dream > button:hover { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+.dreamNote { grid-column: 1 / -1; margin-top: .25rem; color: color-mix(in srgb, var(--color-text) 75%, transparent); font-size: .5rem; letter-spacing: .08em; text-transform: uppercase; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
+.chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; margin-top: 3px; }
+.chips button { padding: 2px 5px; border: 1px solid rgba(243,236,218,.45); background: rgba(9,8,8,.78); color: var(--color-text); font: 700 .48rem/1.2 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+.chips button:hover, .chips button:focus-visible { border-color: var(--color-accent); color: var(--color-accent); outline: none; }
+.chips button:active { background: var(--color-accent); color: var(--color-bg); }
+.steer { color: var(--color-accent); font-size: .56rem; }
+.steer b { color: var(--color-text); background: var(--color-hot); padding: 0 .3em; margin-right: .3em; }
+.toast { padding: .15rem .35rem; background: var(--color-hot); color: var(--color-text); font-size: .54rem; white-space: normal; text-align: left; text-shadow: none; }
+/* phone-size cards (X mobile, /listen/x on phones): keep steering, just compact */
+@media (max-height: 220px) {
+  .dream { top: 40px; width: min(54%, 230px); }
+  .dream input, .dream > button { height: 24px; }
+  .chips button:nth-child(n+3) { display: none; }
+  .dreamNote { font-size: .46rem; }
+}
+@media (max-width: 420px) { .dream { width: min(58%, 230px); } .chips button:nth-child(n+3) { display: none; } }
+@media (prefers-reduced-motion: reduce) { .frame[data-live] .air::before { animation: none; } .live { transition: none; } }
+.retry { margin-left: .4em; padding: 0 .35em; border: 1px solid var(--color-text); background: var(--color-bg); color: var(--color-text); font: 700 .5rem/1.4 var(--font-mono); cursor: pointer; }
+
+/* muted autoplay: one big obvious unmute */
+.sound { position: absolute; left: clamp(.55rem, 2.6vw, 1rem); top: 24%; z-index: 4; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .9rem; border: 3px solid var(--color-accent); background: var(--color-accent); color: var(--color-bg); font: 900 1.05rem/1 var(--font-display); font-variation-settings: "wdth" 120; letter-spacing: .01em; cursor: pointer; box-shadow: 5px 5px 0 var(--color-hot); animation: soundPulse 1.2s ease-in-out infinite; }
+.sound:hover { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+.sound:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+@keyframes soundPulse { 50% { transform: scale(1.05); } }
+@media (max-height: 220px) { .sound { top: 20%; font-size: .85rem; padding: .4rem .65rem; } }
+@media (prefers-reduced-motion: reduce) { .sound { animation: none; } }
+
+/* Save my session: 30 s clip, made on-device */
+.recOn { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); animation: blink 1s steps(2) infinite; }
+.clipPanel { position: absolute; z-index: 6; right: clamp(.55rem, 2.6vw, 1rem); bottom: 62px; display: flex; gap: .5rem; padding: .4rem; border: 3px solid var(--color-accent); background: rgba(9,8,8,.94); box-shadow: 5px 5px 0 var(--color-hot); max-width: min(92%, 360px); }
+.clipPanel video { width: 120px; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
+.clipPanel > div { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 4px; font: 700 .55rem/1.2 var(--font-mono); letter-spacing: .06em; }
+.clipPanel b { flex-basis: 100%; color: var(--color-accent); }
+.clipPanel small { flex-basis: 100%; color: color-mix(in srgb, var(--color-text) 75%, transparent); font-size: .5rem; }
+.clipPanel button, .clipPanel a { padding: 4px 7px; border: 2px solid var(--color-accent); background: var(--color-accent); color: var(--color-bg); font: 900 .55rem/1 var(--font-mono); letter-spacing: .06em; text-decoration: none; cursor: pointer; }
+.clipPanel a, .clipPanel button[aria-label="Close"] { background: transparent; color: var(--color-text); border-color: rgba(243,236,218,.45); }
+.clipPanel button:hover, .clipPanel a:hover { background: var(--color-hot); border-color: var(--color-hot); color: var(--color-text); }
+@media (max-height: 220px) { .clipPanel { bottom: 44px; } .clipPanel video { width: 84px; } }
+@media (prefers-reduced-motion: reduce) { .recOn { animation: none; } }
+/* song translator caption: the sung line, then the scene it became */
+.cue { margin: .35rem 0 0; display: grid; gap: 1px; min-height: 2.1rem; max-width: 100%; pointer-events: none; text-shadow: 0 1px 3px #000, 0 0 8px rgba(0,0,0,.7); }
+.cueLyric { color: color-mix(in srgb, var(--color-text) 62%, transparent); font: italic 600 .55rem/1.25 var(--font-mono); letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cueScene { color: color-mix(in srgb, var(--color-accent) 88%, transparent); font: 700 .56rem/1.25 var(--font-mono); letter-spacing: .05em; text-transform: uppercase; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; animation: cueIn .45s ease-out; }
+.cueScene::before { content: "\2192\00a0"; color: var(--color-hot); }
+@keyframes cueIn { from { opacity: 0; transform: translateY(3px); filter: blur(2px); } }
+@media (max-height: 300px) { .cue { min-height: 0; margin-top: .25rem; } .cueScene { -webkit-line-clamp: 1; } }
+@media (max-height: 220px) { .cue { display: none; } }
+@media (prefers-reduced-motion: reduce) { .cueScene { animation: none; } }
+/* narrow cards (phones): TAP FOR SOUND sits beside the prompt box instead of over it */
+@media (max-width: 520px) {
+  .sound { top: calc(clamp(.55rem, 2.6vw, 1rem) + 40px); max-width: calc(100% - min(58%, 230px) - 1.6rem); white-space: normal; line-height: 1.05; font-size: .8rem; padding: .45rem .6rem; gap: .35rem; box-shadow: 3px 3px 0 var(--color-hot); }
+}
+
+/* Homepage hero / TV (?hero=1): controls fade out after 3s still in TV mode */
+.frame[data-hero] .out { cursor: pointer; font-family: inherit; font-size: inherit; letter-spacing: inherit; }
+.frame[data-idle] { cursor: none; }
+.frame[data-idle] > :not(canvas):not(audio) { opacity: 0; pointer-events: none; transition: opacity .6s; }
+.frame[data-tv] > * { transition: opacity .3s; }
+.frame[data-idle] > .sound { opacity: 1; pointer-events: auto; }
+@media (min-width: 900px) {
+  .frame[data-hero] { padding: 1.4rem 1.6rem; }
+  .frame[data-hero] .top { font-size: .7rem; }
+  .frame[data-hero] .mark { font-size: 1.1rem; }
+  .frame[data-hero] .title { font-size: clamp(3rem, 6vw, 6.5rem); }
+  .frame[data-hero] .lane { font-size: .8rem; }
+  .frame[data-hero] .dream { width: min(40%, 380px); top: calc(1.4rem + 52px); right: 1.6rem; }
+  .frame[data-hero] .dream input, .frame[data-hero] .dream > button { height: 38px; font-size: .78rem; }
+  .frame[data-hero] .dream > button { width: 46px; }
+  .frame[data-hero] .sound { font-size: 1.5rem; padding: .8rem 1.2rem; }
+}
+
+.chips button[data-active] { background: var(--color-accent); color: var(--color-bg); border-color: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); }

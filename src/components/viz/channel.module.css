@@ -1,0 +1,34 @@
+/* Channel dial: a transit-sign strip. Codes are the Signal Theater / VZX scene numbers. */
+.dial { display: grid; gap: var(--space-2); justify-items: start; }
+.now { display: flex; align-items: stretch; border: 3px solid var(--color-text); background: var(--color-bg); box-shadow: var(--shadow-sm); transform: rotate(var(--pd-tilt-sm)); }
+.step { appearance: none; min-width: 48px; min-height: 48px; border: 0; background: var(--color-text); color: var(--color-bg); font-size: .9rem; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast); }
+.step:hover { background: var(--color-accent); }
+.step:active { transform: translateY(2px); }
+.step:focus-visible, .chip:focus-visible, .embedBtn:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.label { display: grid; align-content: center; gap: .15rem; min-width: 13.5rem; margin: 0; padding: .35rem .9rem; }
+.label small { font-size: var(--text-xs); letter-spacing: .24em; color: var(--color-hot); }
+.label strong { font: 900 clamp(1.1rem, 1.9vw, 1.6rem)/.9 var(--font-display); font-variation-settings: "wdth" 62; text-transform: uppercase; white-space: nowrap; }
+.label span { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--color-muted); white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.chip { appearance: none; position: relative; min-width: 34px; height: 34px; padding: 0 .4rem; border: 2px solid color-mix(in srgb, var(--color-text) 35%, transparent); background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  color: var(--color-text); font: 500 .66rem/1 var(--font-mono); letter-spacing: .08em; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast); }
+.chip i { position: absolute; top: 2px; right: 2px; width: 5px; height: 5px; background: var(--color-hot); }
+.chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.chip[aria-pressed="true"] { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-bg); }
+.chip[aria-pressed="true"] i { background: var(--color-bg); }
+.theater .now { transform: none; }
+.theater .label { min-width: 16rem; }
+.embedBtn { appearance: none; display: inline-flex; align-items: center; gap: .4rem; min-height: 32px; padding: 0 .55rem; border: 2px solid var(--color-text); background: var(--color-bg); color: var(--color-text);
+  font: 500 .6rem/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+.embedBtn b { color: var(--color-bg); background: var(--color-accent); padding: .2rem .3rem; font-weight: 500; }
+.embedBtn:hover { border-color: var(--color-accent); }
+@media (max-width: 600px) {
+  .label { min-width: 0; flex: 1; }
+  .now { width: 100%; }
+  .chip { min-width: 30px; height: 32px; }
+}
+@media (max-width: 600px) {
+  .dial { width: 100%; }
+  .chips { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; padding-bottom: 4px; scrollbar-width: none; }
+  .chips li { flex: 0 0 auto; }
+}

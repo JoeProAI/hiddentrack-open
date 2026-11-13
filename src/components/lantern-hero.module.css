@@ -1,0 +1,8 @@
+.hero { position: relative; width: 100%; height: min(calc(100svh - 190px), 62vw); min-height: 340px; margin: 0 0 clamp(1.5rem, 4vw, 3rem); background: var(--color-bg); border-block: 2px solid var(--color-accent); overflow: hidden; }
+.frame { display: block; width: 100%; height: 100%; border: 0; }
+/* TV: visuals fill the screen; the player dock stays visible underneath */
+.hero[data-tv] { position: fixed; inset: 0 0 var(--ht-dock-h, 96px) 0; z-index: 60; height: auto; min-height: 0; margin: 0; border: 0; }
+@media (max-width: 700px) {
+  .hero { height: min(calc(100svh - 260px), 128vw); min-height: 320px; }
+  .hero[data-tv] { inset: 0 0 var(--ht-dock-h, 150px) 0; }
+}

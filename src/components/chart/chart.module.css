@@ -1,0 +1,208 @@
+/* The Cobbler's Chart. Iron-gall ink on old parchment, sealing-wax red for what you picked. */
+.chart {
+  --color-bg: var(--paper, #f0eadb);
+  --color-surface: #e7d6ae;
+  --color-surface-deep: #d9c18c;
+  --color-text: #33241a;
+  --color-muted: #7a6446;
+  --color-accent: #a8321f;
+  --color-focus: var(--signal, #de4b2e);
+  --color-success: #4d5a2a;
+  --color-warning: #8a5a12;
+  --color-danger: #a8321f;
+
+  --font-display: var(--font-fell), "IM Fell English", Georgia, "Times New Roman", serif;
+  --font-body: var(--font-mono), "DM Mono", "Courier New", monospace;
+  --text-xs: .6rem; --leading-xs: 1.4;
+  --text-sm: .74rem; --leading-sm: 1.6;
+  --text-base: .86rem; --leading-base: 1.7;
+  --text-lg: 1.5rem; --leading-lg: 1.05;
+  --text-xl: clamp(2rem, 3.4vw, 2.8rem); --leading-xl: .95;
+  --text-2xl: clamp(3.6rem, 9vw, 8.4rem); --leading-2xl: .82;
+
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2.5rem;
+  --radius-sm: 1px; --radius-md: 2px; --radius-lg: 3px;
+  --shadow-sm: 0 1px 0 color-mix(in srgb, var(--color-text) 18%, transparent);
+  --shadow-md: 0 14px 30px -18px color-mix(in srgb, #2a1a0c 70%, transparent);
+  --shadow-lg: 0 40px 60px -40px color-mix(in srgb, #2a1a0c 80%, transparent), inset 0 0 90px color-mix(in srgb, #6b4a1f 34%, transparent);
+
+  --duration-fast: .16s; --duration-base: .32s; --duration-slow: 1.15s;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.4, .64, 1);
+
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+/* Heading: big left, notes tucked low on the right. */
+.head { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 1fr); align-items: end; gap: var(--space-8); padding: 4.5rem 10vw 4.5rem 6vw; }
+.eyebrow { grid-column: 1 / -1; margin: 0; color: var(--color-accent); font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; }
+.head h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: var(--text-2xl); line-height: var(--leading-2xl); letter-spacing: -.035em; }
+.head h1 em { font-style: italic; color: var(--color-accent); }
+.lede { margin: 0 0 .6rem; max-width: 28rem; font-size: var(--text-base); line-height: var(--leading-base); color: #4a3a2c; }
+
+/* Stage: chart plus the ledger slip. The slip pokes above the chart top on wide screens (the grid break). */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 21rem; gap: var(--space-6); align-items: start; padding: 0 3vw 0 6vw; }
+
+.frame { position: relative; border: 1px solid color-mix(in srgb, var(--color-text) 45%, transparent); box-shadow: var(--shadow-md); background: var(--color-surface); }
+.scroller { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-color: var(--color-muted) transparent; }
+.scroller:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+
+.sheet {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 12% 18%, color-mix(in srgb, #8a5a22 22%, transparent), transparent 38%),
+    radial-gradient(ellipse at 88% 86%, color-mix(in srgb, #7a4a1a 26%, transparent), transparent 42%),
+    radial-gradient(circle at 62% 30%, color-mix(in srgb, #b98a48 18%, transparent), transparent 22%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .32 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(160deg, #ecdcb4, #e2cc98 60%, #d8bd85);
+  box-shadow: var(--shadow-lg);
+  clip-path: circle(0% at var(--ox) var(--oy));
+  transition: clip-path var(--duration-slow) var(--ease-out);
+}
+.open .sheet { clip-path: circle(150% at var(--ox) var(--oy)); }
+.svg { display: block; width: 100%; min-width: 860px; height: auto; color: var(--color-text); }
+
+/* Plan ink */
+.plan { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.outer { stroke-width: 5; stroke: color-mix(in srgb, var(--color-text) 85%, transparent); }
+.wall { stroke-width: 2.6; }
+.wallCellar { stroke-dasharray: 10 6; }
+.wallPorch { stroke-dasharray: 2 9; stroke-width: 3.4; }
+.stairs { color: color-mix(in srgb, var(--color-text) 60%, transparent); stroke: none; }
+.hall { stroke-width: 1; stroke-dasharray: 3 8; opacity: .45; }
+.room, .roomLabel, .compass, .hallLabel { opacity: 0; transition: opacity .6s var(--ease-out) calc(.25s + var(--r, 0) * 70ms); }
+.open .room, .open .roomLabel, .open .compass, .open .hallLabel { opacity: 1; }
+.roomName { font-family: var(--font-display); font-style: italic; font-size: 26px; fill: var(--color-text); }
+.roomNote { font-family: var(--font-body); font-size: 9.5px; letter-spacing: .14em; fill: var(--color-muted); }
+.hallLabel { font-family: var(--font-body); font-size: 10px; letter-spacing: .5em; fill: var(--color-muted); }
+.compass circle { fill: none; stroke: var(--color-muted); stroke-width: 1; }
+.compass path { fill: color-mix(in srgb, var(--color-text) 70%, transparent); }
+.compass text { font-family: var(--font-display); font-size: 16px; fill: var(--color-text); }
+
+/* Trails: faint until you walk them. Staggered delays make the prints step in order. */
+.trail { cursor: pointer; outline: none; }
+.hit { fill: none; stroke: transparent; stroke-width: 24; stroke-linecap: round; stroke-linejoin: round; pointer-events: stroke; }
+.print { fill: var(--color-text); opacity: 0; transition: opacity .5s var(--ease-out) calc(.5s + var(--r, 0) * 90ms + var(--k) * 14ms); }
+.open .print { opacity: .11; }
+.settled .print { transition: opacity .7s var(--ease-out) calc(var(--k) * 8ms); }
+.open .trailWander .print { opacity: .42; transition: opacity .3s var(--ease-out) calc(var(--k) * 45ms); }
+.open .trailLit .print { opacity: .92; transition: opacity var(--duration-fast) var(--ease-out) calc(var(--k) * 16ms); }
+.open .trailChosen .print { opacity: 1; fill: var(--color-accent); transition: opacity var(--duration-fast) var(--ease-out) calc(var(--k) * 16ms), fill var(--duration-base); }
+.mark { fill: none; stroke: var(--color-text); stroke-width: 2.2; stroke-linecap: round; opacity: 0; transition: opacity .5s calc(.9s + var(--r, 0) * 90ms); }
+.open .mark { opacity: .35; }
+.settled .mark { transition: opacity var(--duration-base); }
+.open .trailLit .mark, .open .trailChosen .mark { opacity: 1; }
+.open .trailChosen .mark { stroke: var(--color-accent); }
+.ring { fill: none; stroke: var(--color-accent); stroke-width: 1.6; opacity: 0; transform: scale(.6); transform-box: fill-box; transform-origin: center; transition: opacity var(--duration-base), transform var(--duration-base) var(--ease-spring); }
+.trailChosen .ring { opacity: 1; transform: none; }
+.trail:focus-visible .ring { opacity: 1; transform: none; stroke: var(--color-focus); stroke-width: 3; }
+.trail:active .ring { transform: scale(.85); }
+.reveal { font-family: var(--font-display); font-size: 17px; fill: var(--color-text); paint-order: stroke; stroke: #e6d3a6; stroke-width: 5px; stroke-linejoin: round; opacity: 0; transition: opacity var(--duration-base) var(--ease-out); pointer-events: none; }
+.trailLit .reveal, .trailChosen .reveal, .trail:focus-visible .reveal { opacity: 1; }
+.trailWander .reveal { opacity: .55; }
+.trailChosen .reveal { fill: var(--color-accent); }
+
+/* The folded state */
+.seal {
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-start; padding: clamp(1.2rem, 4vw, 3rem);
+  background:
+    linear-gradient(90deg, transparent 49.6%, color-mix(in srgb, #5a3c18 22%, transparent) 50%, transparent 50.4%),
+    linear-gradient(0deg, transparent 49.4%, color-mix(in srgb, #5a3c18 18%, transparent) 50%, transparent 50.6%),
+    radial-gradient(ellipse at 30% 70%, #e9d7ab, #d6bb83 80%);
+  transition: opacity .55s var(--ease-out) .25s, visibility 0s linear .8s;
+}
+.open .seal { opacity: 0; visibility: hidden; pointer-events: none; }
+.sealCard { max-width: 25rem; }
+.sealTag { margin: 0 0 var(--space-3); font-size: var(--text-xs); letter-spacing: .2em; color: var(--color-muted); }
+.sealLine { margin: 0 0 var(--space-6); font-family: var(--font-display); font-style: italic; font-size: var(--text-xl); line-height: var(--leading-xl); color: var(--color-text); }
+.sealHint { margin: var(--space-3) 0 0; font-size: var(--text-xs); letter-spacing: .08em; color: var(--color-muted); }
+.sealBtn {
+  appearance: none; min-height: 52px; padding: 0 1.4rem; border: 0; border-radius: 999px 999px 999px 4px; cursor: pointer;
+  background: radial-gradient(circle at 35% 30%, #c4482f, var(--color-accent) 55%, #7a2213);
+  color: #f6e7c8; font: italic 1.25rem/1 var(--font-display); letter-spacing: .01em;
+  box-shadow: 0 2px 0 #5e190d, 0 10px 18px -10px #3a0e06;
+  transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast);
+}
+.sealBtn:hover { transform: translateY(-2px) rotate(-1deg); box-shadow: 0 4px 0 #5e190d, 0 16px 24px -12px #3a0e06; }
+.sealBtn:active { transform: translateY(1px); box-shadow: 0 1px 0 #5e190d; }
+.sealBtn:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 5px; }
+.sealBtn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Ledger slip */
+.slip {
+  position: sticky; top: var(--space-4); margin-top: -2.5rem; display: flex; flex-direction: column; min-height: 26rem;
+  background: repeating-linear-gradient(to bottom, transparent 0 27px, color-mix(in srgb, #5d7a9a 22%, transparent) 27px 28px), #f4ead2;
+  border: 1px solid color-mix(in srgb, var(--color-text) 40%, transparent); box-shadow: var(--shadow-md);
+  transform: rotate(.6deg);
+}
+.slipTop { display: flex; justify-content: space-between; padding: var(--space-3) var(--space-4); border-bottom: 2px solid var(--color-accent); font-size: var(--text-xs); letter-spacing: .16em; color: var(--color-muted); }
+.slipBody { flex: 1; padding: var(--space-6) var(--space-4) var(--space-4); }
+.slipRoom { margin: 0 0 var(--space-2); font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--color-accent); }
+.slipTitle { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: var(--text-xl); line-height: var(--leading-xl); letter-spacing: -.01em; outline: none; }
+.slipTitle:focus-visible { outline: 2px dashed var(--color-focus); outline-offset: 4px; }
+.slipLane { margin: var(--space-2) 0 var(--space-4); font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--color-muted); }
+.slipHook { margin: 0; font-size: var(--text-sm); line-height: var(--leading-sm); color: #4a3a2c; display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; }
+.slipEmpty { margin: 0; font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.35; color: #4a3a2c; }
+.slipWarn { margin: var(--space-4) 0 0; padding: var(--space-2) var(--space-3); border-left: 3px solid var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); font-size: var(--text-xs); line-height: 1.5; letter-spacing: .04em; }
+.slipTools { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-6); }
+.slipFine { margin: var(--space-4) 0 0; font-size: var(--text-xs); letter-spacing: .06em; color: var(--color-muted); }
+.slipFine a { color: inherit; text-underline-offset: .25em; }
+.slipFine a:hover { color: var(--color-accent); }
+.slipFine a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.slipFoot { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: var(--space-4); border-top: 1px dashed color-mix(in srgb, var(--color-text) 35%, transparent); }
+
+.btn, .btnMain, .btnQuiet {
+  appearance: none; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 var(--space-4);
+  border: 1px solid var(--color-text); border-radius: var(--radius-sm); background: transparent; color: var(--color-text);
+  font: 500 var(--text-xs)/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast), transform var(--duration-fast), border-color var(--duration-fast);
+}
+.btnMain { background: var(--color-text); color: #f4ead2; }
+.btn:hover, .btnQuiet:hover { background: var(--color-text); color: #f4ead2; }
+.btnMain:hover { background: var(--color-accent); border-color: var(--color-accent); }
+.btn:active, .btnMain:active, .btnQuiet:active { transform: translateY(1px); }
+.btn:focus-visible, .btnMain:focus-visible, .btnQuiet:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.btn:disabled, .btnMain:disabled, .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+.btnMain[aria-busy="true"] { cursor: progress; opacity: .8; }
+.btnQuiet { border-color: transparent; text-decoration: underline; text-underline-offset: .3em; }
+
+.dragHint { display: none; margin: var(--space-3) 6vw 0; font-size: var(--text-xs); letter-spacing: .12em; color: var(--color-muted); }
+
+/* Field notes */
+.notes { padding: 4.5rem 10vw 3rem 6vw; }
+.notesTitle { margin: 0 0 var(--space-8); font-family: var(--font-display); font-weight: 400; font-size: var(--text-xl); line-height: 1; letter-spacing: -.01em; }
+.notesTitle em { margin-left: .5em; font-family: var(--font-body); font-style: normal; font-size: var(--text-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--color-muted); vertical-align: middle; }
+.notesGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-8) var(--space-6); }
+.noteRoom h3 { margin: 0; padding-bottom: var(--space-2); border-bottom: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent); font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 1.35rem; }
+.noteSub { margin: var(--space-2) 0 var(--space-3); font-size: var(--text-xs); letter-spacing: .1em; color: var(--color-muted); }
+.noteRoom ul { margin: 0; padding: 0; list-style: none; }
+.noteSong { appearance: none; width: 100%; min-height: 36px; padding: var(--space-1) 0; border: 0; background: none; color: var(--color-text); text-align: left; font: var(--text-sm)/1.35 var(--font-body); cursor: pointer; transition: color var(--duration-fast), padding var(--duration-fast); }
+.noteSong:hover { color: var(--color-accent); padding-left: var(--space-2); }
+.noteSong:active { transform: translateY(1px); }
+.noteSong:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.noteOn { color: var(--color-accent); }
+.noteOn::before { content: ""; display: inline-block; width: .5em; height: .5em; margin-right: .5em; border-radius: 50%; background: var(--color-accent); }
+
+.instant .sheet, .instant .seal, .instant .room, .instant .roomLabel, .instant .compass, .instant .hallLabel, .instant .print, .instant .mark { transition: none; }
+
+@media (max-width: 1100px) {
+  .stage { grid-template-columns: minmax(0, 1fr); padding: 0 4vw; }
+  .slip { position: static; margin-top: 0; min-height: 0; transform: none; }
+  .notesGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .head { grid-template-columns: 1fr; gap: var(--space-4); padding: 3rem 6vw 2rem; }
+  .stage { padding: 0; }
+  .frame { border-left: 0; border-right: 0; }
+  .dragHint { display: block; }
+  .notes { padding: 3rem 6vw; }
+}
+@media (max-width: 520px) {
+  .notesGrid { grid-template-columns: 1fr; }
+  .noteSong { min-height: 44px; }
+  .sealLine { font-size: 1.7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .seal, .room, .roomLabel, .compass, .hallLabel, .print, .mark, .ring, .reveal, .sealBtn { transition: none !important; }
+}

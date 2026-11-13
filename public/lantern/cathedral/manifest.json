@@ -1,0 +1,222 @@
+{
+ "aspect": 1.77683,
+ "layers": [
+  {
+   "id": "crown",
+   "band": "highMid",
+   "center": [
+    0.5,
+    0.2
+   ],
+   "motion": 1.0,
+   "phase": 0.0,
+   "file": "crown.webp",
+   "rect": [
+    0.23325,
+    0.0,
+    0.53349,
+    0.42189
+   ],
+   "motionType": "open"
+  },
+  {
+   "id": "left-tower",
+   "band": "lowMid",
+   "center": [
+    0.3,
+    0.48
+   ],
+   "motion": 1.08,
+   "phase": 0.71,
+   "file": "left-tower.webp",
+   "rect": [
+    0.16447,
+    0.11265,
+    0.25419,
+    0.76408
+   ],
+   "motionType": "lean"
+  },
+  {
+   "id": "right-tower",
+   "band": "lowMid",
+   "center": [
+    0.7,
+    0.48
+   ],
+   "motion": 1.08,
+   "phase": 1.42,
+   "file": "right-tower.webp",
+   "rect": [
+    0.58194,
+    0.11371,
+    0.25359,
+    0.76302
+   ],
+   "motionType": "lean"
+  },
+  {
+   "id": "left-ribs",
+   "band": "treble",
+   "center": [
+    0.13,
+    0.38
+   ],
+   "motion": 1.22,
+   "phase": 2.13,
+   "file": "left-ribs.webp",
+   "rect": [
+    0.0,
+    0.0,
+    0.30801,
+    0.82784
+   ],
+   "motionType": "sweep"
+  },
+  {
+   "id": "right-ribs",
+   "band": "treble",
+   "center": [
+    0.87,
+    0.38
+   ],
+   "motion": 1.22,
+   "phase": 2.84,
+   "file": "right-ribs.webp",
+   "rect": [
+    0.69258,
+    0.0,
+    0.30742,
+    0.82784
+   ],
+   "motionType": "sweep"
+  },
+  {
+   "id": "inner-spires",
+   "band": "highMid",
+   "center": [
+    0.5,
+    0.5
+   ],
+   "motion": 0.86,
+   "phase": 3.55,
+   "file": "inner-spires.webp",
+   "rect": [
+    0.32057,
+    0.23592,
+    0.35945,
+    0.53348
+   ],
+   "motionType": "lift"
+  },
+  {
+   "id": "bridge",
+   "band": "lowMid",
+   "center": [
+    0.5,
+    0.7
+   ],
+   "motion": 0.72,
+   "phase": 4.26,
+   "file": "bridge.webp",
+   "rect": [
+    0.16029,
+    0.57598,
+    0.68002,
+    0.24867
+   ],
+   "motionType": "float"
+  },
+  {
+   "id": "steps",
+   "band": "bass",
+   "center": [
+    0.5,
+    0.84
+   ],
+   "motion": 1.18,
+   "phase": 4.97,
+   "file": "steps.webp",
+   "rect": [
+    0.31818,
+    0.70138,
+    0.36423,
+    0.25717
+   ],
+   "motionType": "rise"
+  },
+  {
+   "id": "left-foundation",
+   "band": "bass",
+   "center": [
+    0.22,
+    0.75
+   ],
+   "motion": 1.32,
+   "phase": 5.68,
+   "file": "left-foundation.webp",
+   "rect": [
+    0.0,
+    0.48884,
+    0.4372,
+    0.47184
+   ],
+   "motionType": "shift"
+  },
+  {
+   "id": "right-foundation",
+   "band": "bass",
+   "center": [
+    0.78,
+    0.75
+   ],
+   "motion": 1.32,
+   "phase": 6.39,
+   "file": "right-foundation.webp",
+   "rect": [
+    0.5634,
+    0.48884,
+    0.4366,
+    0.47184
+   ],
+   "motionType": "shift"
+  },
+  {
+   "id": "left-foreground",
+   "band": "bass",
+   "center": [
+    0.16,
+    0.91
+   ],
+   "motion": 1.48,
+   "phase": 7.1,
+   "file": "left-foreground.webp",
+   "rect": [
+    0.0,
+    0.7322,
+    0.41746,
+    0.2678
+   ],
+   "motionType": "depth"
+  },
+  {
+   "id": "right-foreground",
+   "band": "bass",
+   "center": [
+    0.84,
+    0.91
+   ],
+   "motion": 1.48,
+   "phase": 7.81,
+   "file": "right-foreground.webp",
+   "rect": [
+    0.58313,
+    0.7322,
+    0.41687,
+    0.2678
+   ],
+   "motionType": "depth"
+  }
+ ],
+ "source": "Signal Vault CUTLIGHT (github.com/JoeProAI/signal-vault), 12 transparent layers, cropped + 0.6x for the embed"
+}

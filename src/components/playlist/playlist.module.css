@@ -1,0 +1,32 @@
+/* Playlist rows: the Fresh Cuts row, set in the dark. */
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding: 0 10vw 2rem 6vw; }
+.all { appearance: none; display: inline-flex; align-items: center; gap: .7rem; min-height: 52px; padding: 0 1.4rem; border: 1px solid var(--acid); background: var(--acid); color: var(--ink); font: 500 .7rem/1 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; cursor: pointer; transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease; }
+.all span { font-size: .9rem; letter-spacing: -.1em; }
+.all:hover, .all[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); color: var(--paper); }
+.all:active { transform: translateY(2px); }
+.all:focus-visible { outline: 3px solid var(--paper); outline-offset: 4px; }
+.count { color: color-mix(in srgb, var(--paper) 55%, transparent); font-size: .6rem; letter-spacing: .14em; }
+.err { flex-basis: 100%; margin: 0; padding: .5rem .8rem; border-left: 3px solid var(--signal); color: var(--paper); background: color-mix(in srgb, var(--signal) 18%, transparent); font-size: .68rem; }
+.empty { margin: 0; padding: 3rem 10vw 4rem 6vw; font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.15; color: color-mix(in srgb, var(--paper) 75%, transparent); }
+.rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--paper) 16%, transparent); }
+.row { position: relative; display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 13rem 7rem; align-items: center; gap: 1.5rem; padding: 1.5rem 10vw 1.5rem 6vw; border-bottom: 1px solid color-mix(in srgb, var(--paper) 16%, transparent); transition: background .18s ease, color .18s ease; animation: drift .6s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--k) * 70ms); }
+.row:hover, .row:focus-within, .on { background: var(--paper); color: var(--ink); }
+.num { font-family: var(--font-display); font-size: 3.2rem; line-height: 1; letter-spacing: -.08em; color: var(--signal); }
+.row:hover .num, .row:focus-within .num { color: var(--signal); }
+.on .num { color: var(--ink); }
+.title { appearance: none; background: none; border: 0; padding: 0; margin: 0; color: inherit; cursor: pointer; text-align: left; font-family: var(--font-display); font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: 1; letter-spacing: -.04em; }
+.title::after { position: absolute; inset: 0; content: ""; }
+.title:focus-visible::after { outline: 3px solid var(--acid); outline-offset: -3px; }
+.hook { margin: .55rem 0 0; max-width: 38rem; color: color-mix(in srgb, currentColor 70%, transparent); font-size: .76rem; line-height: 1.6; }
+.lane { color: color-mix(in srgb, currentColor 55%, transparent); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+.tools { position: relative; z-index: 1; justify-self: end; display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }
+.state { font-size: .66rem; font-weight: 500; letter-spacing: .12em; color: var(--acid); }
+.row:hover .state, .row:focus-within .state, .on .state { color: var(--signal); }
+.tool { padding: .3rem 0; min-height: 28px; font-size: .58rem; letter-spacing: .14em; color: inherit; opacity: .7; text-decoration: none; }
+.tool:hover { opacity: 1; color: var(--signal); }
+.tool:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; opacity: 1; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@keyframes drift { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+@media (max-width: 960px) { .row { grid-template-columns: 4rem minmax(0, 1fr) 6rem; } .lane { display: none; } }
+@media (max-width: 600px) { .bar { padding: 0 6vw 1.5rem; } .row { grid-template-columns: 2.6rem minmax(0, 1fr) auto; gap: 1rem; padding: 1.2rem 6vw; } .num { font-size: 2rem; } .state { display: none; } .tool { min-height: 44px; display: inline-flex; align-items: center; } }
+@media (prefers-reduced-motion: reduce) { .row { animation: none; transition: none; } .all { transition: none; } }

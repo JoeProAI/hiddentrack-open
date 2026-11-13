@@ -1,0 +1,21 @@
+.theater { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto 1fr auto; background: var(--color-bg); color: var(--color-text); animation: cut var(--pd-charge) steps(3) both; }
+@keyframes cut { from { clip-path: inset(48% 0 48% 0); } to { clip-path: inset(0 0 0 0); } }
+.viz { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.top, .bottom { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-4) 3vw; }
+.top { background: linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 85%, transparent), transparent); }
+.bottom { grid-row: 3; align-items: flex-end; background: linear-gradient(0deg, color-mix(in srgb, var(--color-bg) 92%, transparent) 30%, transparent); padding-bottom: var(--space-6); }
+.mark { font-size: var(--text-xs); letter-spacing: .26em; }
+.mark em { font-style: normal; color: var(--color-accent); }
+.close { appearance: none; min-height: 44px; padding: 0 1rem; border: 2px solid var(--color-text); background: var(--color-bg); color: var(--color-text); font: 500 .66rem/1 var(--font-mono); letter-spacing: .18em; cursor: pointer; }
+.close:hover { background: var(--color-hot); border-color: var(--color-hot); }
+.close:focus-visible, .transport button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.track { display: grid; gap: .3rem; min-width: 0; flex: 1 1 22rem; }
+.track small { font-size: var(--text-xs); letter-spacing: .24em; color: var(--color-hot); }
+.track strong { font: 900 clamp(2.2rem, 6.5vw, 6.5rem)/.82 var(--font-display); font-variation-settings: "wdth" 66; text-transform: uppercase; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.track span { font-size: var(--text-sm); color: var(--color-muted); }
+.transport { display: flex; }
+.transport button { appearance: none; min-width: 56px; height: 56px; margin-left: -2px; border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent); background: var(--color-bg); color: var(--color-text); font: 700 .8rem/1 var(--font-mono); cursor: pointer; }
+.transport .main { min-width: 76px; background: var(--color-accent); border-color: var(--color-accent); color: var(--color-bg); font-size: 1.2rem; }
+.transport button:hover { border-color: var(--color-accent); }
+@media (max-width: 600px) { .bottom { flex-direction: column; align-items: stretch; } }
+@media (prefers-reduced-motion: reduce) { .theater { animation: none; } }
