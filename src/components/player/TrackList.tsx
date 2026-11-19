@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { slugs } from "@/lib/fresh-cuts";
 import { GENRES, GENRE_LABEL, MOODS, MOOD_LABEL, type Genre, type Mood, genresFor, moodsFor } from "@/lib/moods";
@@ -19,6 +19,7 @@ export type ShelfFilter = { mood?: string; genre?: string; q?: string };
 
 const asMood = (v?: string | null) => ((MOODS as readonly string[]).includes(v ?? "") ? (v as Mood) : null);
 const asGenre = (v?: string | null) => ((GENRES as readonly string[]).includes(v ?? "") ? (v as Genre) : null);
+const BATCH_SIZE = 30;
 
 export default function TrackList({ initial = {} }: { initial?: ShelfFilter }) {
   const { tracks, index, playing, load, toggle } = usePlayer();
@@ -52,6 +53,37 @@ export default function TrackList({ initial = {} }: { initial?: ShelfFilter }) {
     () => tracks.map((_, i) => i).filter((i) => (!mood || facts[i].moods.includes(mood)) && (!genre || facts[i].genres.includes(genre)) && (!needle || needle.split(/\s+/).every((w) => facts[i].text.includes(w)))),
     [tracks, facts, mood, genre, needle],
   );
+  const [page, setPage] = useState<{ items: number[]; count: number } | null>(null);
+  const initialShown = useRef(shown);
+  const count = page?.items === shown ? page.count : BATCH_SIZE;
+  const more = useRef<HTMLButtonElement>(null);
+  const append = () => setPage({ items: shown, count: Math.min(count + BATCH_SIZE, shown.length) });
+
+  useEffect(() => {
+    const button = more.current;
+    if (!button || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        observer.disconnect();
+        setPage({ items: shown, count: Math.min(count + BATCH_SIZE, shown.length) });
+      }
+    }, { rootMargin: "600px" });
+    observer.observe(button);
+    return () => observer.disconnect();
+  }, [shown, count]);
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("t");
+    const items = initialShown.current;
+    const position = items.findIndex((i) => slugs[i] === slug);
+    if (position < 0) return;
+    let scroll = 0;
+    const frame = requestAnimationFrame(() => {
+      setPage({ items, count: Math.max(BATCH_SIZE, position + 1) });
+      scroll = requestAnimationFrame(() => document.getElementById(`t-${slug}`)?.scrollIntoView({ block: "center" }));
+    });
+    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(scroll); };
+  }, []);
   const filtered = Boolean(mood || genre || needle);
   const playFrom = (i: number) => load(i, filtered ? shown : undefined);
   const clear = () => {
@@ -127,12 +159,12 @@ export default function TrackList({ initial = {} }: { initial?: ShelfFilter }) {
     )}
 
     <ol className={styles.list}>
-      {shown.map((i, pos) => {
+      {shown.slice(0, count).map((i, pos) => {
         const t = tracks[i];
         const active = i === index;
         const slug = slugs[i];
         return (
-          <li id={`t-${slug}`} key={t.href} className={`${styles.row} ${active ? styles.rowActive : ""}`} style={{ ["--i" as string]: Math.min(pos, 20) }}>
+          <li id={`t-${slug}`} key={t.href} className={`${styles.row} ${active ? styles.rowActive : ""}`} style={{ ["--i" as string]: Math.min(pos, 20), animation: pos >= BATCH_SIZE ? "none" : undefined }}>
             <span className={styles.num} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
             <div className={styles.body}>
               <button
@@ -169,6 +201,13 @@ export default function TrackList({ initial = {} }: { initial?: ShelfFilter }) {
         );
       })}
     </ol>
+    {count < shown.length && (
+      <div style={{ padding: "1rem 3vw" }}>
+        <button ref={more} type="button" className={styles.clear} onClick={append}>
+          Show more cuts ({Math.min(count, shown.length)} of {shown.length})
+        </button>
+      </div>
+    )}
     </>
   );
 }
