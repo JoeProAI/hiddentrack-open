@@ -164,7 +164,7 @@ export default function TrackList({ initial = {} }: { initial?: ShelfFilter }) {
         const active = i === index;
         const slug = slugs[i];
         return (
-          <li id={`t-${slug}`} key={t.href} className={`${styles.row} ${active ? styles.rowActive : ""}`} style={{ ["--i" as string]: Math.min(pos, 20) }}>
+          <li id={`t-${slug}`} key={t.href} className={`${styles.row} ${active ? styles.rowActive : ""}`} style={{ ["--i" as string]: Math.min(pos, 20), animation: pos >= BATCH_SIZE ? "none" : undefined }}>
             <span className={styles.num} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
             <div className={styles.body}>
               <button
